@@ -4,8 +4,8 @@
       <router-link to="/" class="text-white hover:text-gray-200 mx-4">
         Carte
       </router-link>
-      <router-link to="/other" class="text-white hover:text-gray-200 mx-4">
-        Autre Composant
+      <router-link to="/marker-form" class="text-white hover:text-gray-200 mx-4">
+        Formulaire
       </router-link>
     </nav>
     <router-view></router-view>

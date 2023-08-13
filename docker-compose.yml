@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  vue-app:
+    build:
+      context: ./front
+    container_name: vue-app-container
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+  flask-app:
+    build:
+      context: ./back
+    container_name: flask-app-container
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+  db:
+    image: sqlite:latest
+    container_name: db-container
+    volumes:
+      - db-data:/data
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  db-data:
