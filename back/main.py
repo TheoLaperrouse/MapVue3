@@ -10,16 +10,15 @@ class Marker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
-    note = db.Column(db.String(255), nullable=False)
-    beer_price = db.Column(db.Float, nullable=False)
+    note = db.Column(db.String)
+    beer_price = db.Column(db.Float)
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+with app.app_context():
+    db.create_all()
 
 
-@app.route('/get_markers', methods=['GET'])
+@app.route('/markers', methods=['GET'])
 def get_markers():
     try:
         markers = Marker.query.all()
@@ -38,7 +37,7 @@ def get_markers():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/add_marker', methods=['POST'])
+@app.route('/markers', methods=['POST'])
 def add_marker():
     try:
         data = request.get_json()
@@ -57,5 +56,4 @@ def add_marker():
 
 
 if __name__ == '__main__':
-    db.create_all()
     app.run(debug=True)

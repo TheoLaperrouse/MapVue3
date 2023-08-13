@@ -1,6 +1,6 @@
 <template>
     <div class="h-screen bg-gray-100">
-        <l-map ref="map" v-model:zoom="zoom" :center="[48.1117105, -1.6802281]">
+        <l-map ref="map" :zoom="zoom" :center="[48.1117105, -1.6802281]">
             <l-tile-layer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 layer-type="base"
@@ -30,7 +30,7 @@ export default {
     methods: {
         async fetchMarkers() {
             try {
-                const response = await fetch('/api/markers');
+                const response = await fetch('/markers');
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des marqueurs');
                 }
@@ -43,5 +43,3 @@ export default {
     },
 };
 </script>
-
-<style></style>

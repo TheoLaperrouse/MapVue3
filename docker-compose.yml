@@ -1,37 +1,38 @@
 version: '3.8'
 
 services:
-  vue-app:
+  front:
     build:
       context: ./front
-    container_name: vue-app-container
+    container_name: front
     ports:
       - "8080:8080"
     networks:
-      - mynetwork
-  flask-app:
+      - network
+  back:
     build:
       context: ./back
-    container_name: flask-app-container
+    container_name: back
     environment:
-      - FLASK_APP=app.py
+      - FLASK_APP=main.py
       - FLASK_ENV=development
     ports:
       - "5000:5000"
     depends_on:
       - db
     networks:
-      - mynetwork
+      - network
   db:
-    image: sqlite:latest
+    image: keinos/sqlite3:latest
     container_name: db-container
     volumes:
       - db-data:/data
     networks:
-      - mynetwork
+      - network
+    command: ["sleep", "infinity"]
 
 networks:
-  mynetwork:
+  network:
     driver: bridge
 
 volumes:

@@ -28,7 +28,7 @@
             />
         </div>
         <div class="flex flex-col space-y-1">
-            <label for="beerPrice" class="text-lg font-semibold"> Prix de la bière le moins cher: </label>
+            <label for="beerPrice" class="text-lg font-semibold"> Prix de la bière la moins chère: </label>
             <input
                 v-model="beerPrice"
                 type="text"
@@ -56,7 +56,7 @@ export default {
         };
     },
     methods: {
-        addMarker() {
+        async addMarker() {
             if (this.latitude && this.longitude && this.note && this.beerPrice) {
                 const markerData = {
                     latitude: parseFloat(this.latitude),
@@ -64,11 +64,28 @@ export default {
                     note: this.note,
                     beerPrice: parseFloat(this.beerPrice),
                 };
-                this.$emit('markerAdded', markerData);
-                this.latitude = '';
-                this.longitude = '';
-                this.note = '';
-                this.beerPrice = '';
+
+                try {
+                    const response = await fetch('/markers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(markerData),
+                    });
+
+                    if (response.ok) {
+                        this.$router.push({ name: 'Map' });
+                        this.latitude = '';
+                        this.longitude = '';
+                        this.note = '';
+                        this.beerPrice = '';
+                    } else {
+                        alert("Erreur lors de l'ajout du marqueur.");
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                }
             } else {
                 alert('Veuillez remplir tous les champs du formulaire.');
             }
