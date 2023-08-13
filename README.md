@@ -1,24 +1,3 @@
-# hello-world
+# BarMap
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Ce projet est une application de gestion de marqueurs qui combine un front-end Vue.js et un back-end Flask. Les informations des marqueurs sont stockées dans une base de données SQLite.
