@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///markers.db'
 db = SQLAlchemy(app)
+
+CORS(app)
 
 
 class Marker(db.Model):
@@ -31,7 +34,6 @@ def get_markers():
                 "beer_price": marker.beer_price
             }
             marker_list.append(marker_data)
-
         return jsonify(marker_list), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -39,20 +41,19 @@ def get_markers():
 
 @app.route('/markers', methods=['POST'])
 def add_marker():
-    try:
-        data = request.get_json()
-        latitude = data['latitude']
-        longitude = data['longitude']
-        note = data['note']
-        beer_price = data['beer_price']
+    data = request.get_json()
+    print(data)
+    latitude = data['latitude']
+    longitude = data['longitude']
+    note = data['note']
+    beer_price = data['beer_price']
 
-        marker = Marker(latitude=latitude, longitude=longitude,
-                        note=note, beer_price=beer_price)
-        db.session.add(marker)
-        db.session.commit()
-        return jsonify({"message": "Marker added successfully!"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    marker = Marker(latitude=latitude, longitude=longitude,
+                    note=note, beer_price=beer_price)
+    print(marker)
+    db.session.add(marker)
+    db.session.commit()
+    return jsonify({"message": "Marker added successfully!"}), 201
 
 
 if __name__ == '__main__':

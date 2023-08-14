@@ -62,11 +62,10 @@ export default {
                     latitude: parseFloat(this.latitude),
                     longitude: parseFloat(this.longitude),
                     note: this.note,
-                    beerPrice: parseFloat(this.beerPrice),
+                    beer_price: parseFloat(this.beerPrice),
                 };
-
                 try {
-                    const response = await fetch('/markers', {
+                    const response = await fetch('http://localhost:5000/markers', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -75,7 +74,7 @@ export default {
                     });
 
                     if (response.ok) {
-                        this.$router.push({ name: 'Map' });
+                        this.$router.push('/');
                         this.latitude = '';
                         this.longitude = '';
                         this.note = '';
