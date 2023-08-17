@@ -9,7 +9,7 @@
             <l-marker v-for="marker in markers" :key="marker.id" :lat-lng="[marker.latitude, marker.longitude]">
                 <l-popup>
                     <div>
-                        <strong>Nom:</strong>{{ marker.name }}<br />
+                        <strong>Nom:</strong>{{ marker.barName }}<br />
                         <strong>Note:</strong> {{ marker.note }}<br />
                         <strong>Prix de la bière:</strong> {{ marker.beer_price }}
                     </div>
@@ -23,6 +23,7 @@
 <script>
 import 'leaflet/dist/leaflet.css';
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
+import { getReviews } from '@/services/reviews.service.js';
 
 export default {
     components: {
@@ -37,7 +38,7 @@ export default {
         };
     },
     async created() {
-        this.markers = await this.fetchMarkers();
+        this.markers = await getReviews();
     },
     async mounted() {
         await this.$nextTick();
@@ -45,19 +46,6 @@ export default {
             this.$refs.map.mapObject.invalidateSize();
         }
     },
-    methods: {
-        async fetchMarkers() {
-            try {
-                const response = await fetch('http://127.0.0.1:5000/markers');
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des marqueurs');
-                }
-                const markersData = await response.json();
-                return markersData;
-            } catch (error) {
-                console.error('Erreur:', error);
-            }
-        },
-    },
+    methods: {},
 };
 </script>

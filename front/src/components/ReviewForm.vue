@@ -1,6 +1,15 @@
 <template>
     <div class="flex flex-col items-center p-6 space-y-4">
         <div class="flex flex-col space-y-1">
+            <label for="barName" class="text-lg font-semibold"> Nom du bar: </label>
+            <input
+                v-model="barName"
+                type="text"
+                id="barName"
+                class="border rounded p-2 focus:outline-none focus:border-blue-500"
+            />
+        </div>
+        <div class="flex flex-col space-y-1">
             <label for="latitude" class="text-lg font-semibold"> Latitude: </label>
             <input
                 v-model="latitude"
@@ -15,6 +24,15 @@
                 v-model="longitude"
                 type="text"
                 id="longitude"
+                class="border rounded p-2 focus:outline-none focus:border-blue-500"
+            />
+        </div>
+        <div class="flex flex-col space-y-1">
+            <label for="reviewer" class="text-lg font-semibold"> Votre prénom: </label>
+            <input
+                v-model="reviewer"
+                type="text"
+                id="reviewer"
                 class="border rounded p-2 focus:outline-none focus:border-blue-500"
             />
         </div>
@@ -46,6 +64,8 @@
 </template>
 
 <script>
+import { postReview } from '@/services/reviews.service.js';
+
 export default {
     data() {
         return {
@@ -53,6 +73,8 @@ export default {
             longitude: '',
             note: '',
             beerPrice: '',
+            reviewer: '',
+            barName: '',
         };
     },
     methods: {
@@ -63,22 +85,19 @@ export default {
                     longitude: parseFloat(this.longitude),
                     note: this.note,
                     beer_price: parseFloat(this.beerPrice),
+                    reviewer: this.reviewer,
+                    barName: this.barName,
                 };
+                const response = await postReview(markerData);
                 try {
-                    const response = await fetch('http://localhost:5000/markers', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(markerData),
-                    });
-
                     if (response.ok) {
                         this.$router.push('/');
                         this.latitude = '';
                         this.longitude = '';
                         this.note = '';
                         this.beerPrice = '';
+                        this.reviewer = '';
+                        this.barName = '';
                     } else {
                         alert("Erreur lors de l'ajout du marqueur.");
                     }

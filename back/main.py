@@ -15,6 +15,8 @@ class Marker(db.Model):
     longitude = db.Column(db.Float, nullable=False)
     note = db.Column(db.String)
     beer_price = db.Column(db.Float)
+    bar_name = db.Column(db.String)
+    reviewer = db.Column(db.String)
 
 
 with app.app_context():
@@ -31,7 +33,9 @@ def get_markers():
                 "latitude": marker.latitude,
                 "longitude": marker.longitude,
                 "note": marker.note,
-                "beer_price": marker.beer_price
+                "beer_price": marker.beer_price,
+                "bar_name": marker.bar_name,
+                "reviewer": marker.reviewer
             }
             marker_list.append(marker_data)
         return jsonify(marker_list), 200
@@ -47,9 +51,11 @@ def add_marker():
     longitude = data['longitude']
     note = data['note']
     beer_price = data['beer_price']
+    bar_name = data['bar_name']
+    reviewer = data['reviewer']
 
     marker = Marker(latitude=latitude, longitude=longitude,
-                    note=note, beer_price=beer_price)
+                    note=note, beer_price=beer_price, bar_name=bar_name, reviewer=reviewer)
     print(marker)
     db.session.add(marker)
     db.session.commit()
