@@ -19,7 +19,7 @@ Exécutez le serveur Flask en utilisant la commande suivante :
 
 
 ```sh
-python main.py
+python3 main.py
 ```
 
 Le serveur démarrera en mode de débogage et écoutera sur le port 5000.

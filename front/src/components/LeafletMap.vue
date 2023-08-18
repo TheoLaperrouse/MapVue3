@@ -6,12 +6,12 @@
                 layer-type="base"
                 name="OpenStreetMap"
             ></l-tile-layer>
-            <l-marker v-for="marker in markers" :key="marker.id" :lat-lng="[marker.latitude, marker.longitude]">
+            <l-marker v-for="marker in reviews" :key="marker.id" :lat-lng="[marker.latitude, marker.longitude]">
                 <l-popup>
                     <div>
-                        <strong>Nom:</strong>{{ marker.barName }}<br />
-                        <strong>Note:</strong> {{ marker.note }}<br />
-                        <strong>Prix de la bière:</strong> {{ marker.beer_price }}
+                        <strong>Nom:</strong>{{ marker.bar_name }}<br />
+                        <strong>Note:</strong> {{ marker.note }} / 5 <br />
+                        <strong>Prix de la bière:</strong> {{ marker.beer_price }} €
                     </div>
                 </l-popup>
             </l-marker>
@@ -38,7 +38,7 @@ export default {
         };
     },
     async created() {
-        this.markers = await getReviews();
+        this.reviews = await getReviews();
     },
     async mounted() {
         await this.$nextTick();

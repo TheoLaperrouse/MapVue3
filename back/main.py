@@ -3,13 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///markers.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reviews.db'
 db = SQLAlchemy(app)
 
 CORS(app)
 
 
-class Marker(db.Model):
+class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
@@ -17,49 +17,35 @@ class Marker(db.Model):
     beer_price = db.Column(db.Float)
     bar_name = db.Column(db.String)
     reviewer = db.Column(db.String)
+    description = db.Column(db.String)
+
+    def to_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
 
 with app.app_context():
     db.create_all()
 
 
-@app.route('/markers', methods=['GET'])
-def get_markers():
+@app.route('/reviews', methods=['GET'])
+def get_reviews():
     try:
-        markers = Marker.query.all()
-        marker_list = []
-        for marker in markers:
-            marker_data = {
-                "latitude": marker.latitude,
-                "longitude": marker.longitude,
-                "note": marker.note,
-                "beer_price": marker.beer_price,
-                "bar_name": marker.bar_name,
-                "reviewer": marker.reviewer
-            }
-            marker_list.append(marker_data)
-        return jsonify(marker_list), 200
+        reviews = Review.query.all()
+        reviews_list = [review.to_dict() for review in reviews]
+        return jsonify(reviews_list), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/markers', methods=['POST'])
-def add_marker():
+@app.route('/reviews', methods=['POST'])
+def add_review():
     data = request.get_json()
-    print(data)
-    latitude = data['latitude']
-    longitude = data['longitude']
-    note = data['note']
-    beer_price = data['beer_price']
-    bar_name = data['bar_name']
-    reviewer = data['reviewer']
+    review = Review(latitude=data['latitude'], longitude=data['longitude'],
+                    note=data['note'], beer_price=data['beer_price'], bar_name=data['bar_name'], reviewer=data['reviewer'], description=data['description'])
 
-    marker = Marker(latitude=latitude, longitude=longitude,
-                    note=note, beer_price=beer_price, bar_name=bar_name, reviewer=reviewer)
-    print(marker)
-    db.session.add(marker)
+    db.session.add(review)
     db.session.commit()
-    return jsonify({"message": "Marker added successfully!"}), 201
+    return jsonify({"message": "review added successfully!"}), 201
 
 
 if __name__ == '__main__':

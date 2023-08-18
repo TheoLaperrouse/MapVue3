@@ -1,11 +1,11 @@
 export const getReviews = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/markers');
+        const response = await fetch('http://127.0.0.1:5000/reviews');
         if (!response.ok) {
             throw new Error('Erreur lors de la récupération des marqueurs');
         }
-        const markersData = await response.json();
-        return markersData;
+        const reviews = await response.json();
+        return reviews;
     } catch (error) {
         console.error('Erreur:', error);
     }
@@ -13,7 +13,7 @@ export const getReviews = async () => {
 
 export const postReview = async (review) => {
     try {
-        await fetch('http://localhost:5000/markers', {
+        return fetch('http://localhost:5000/reviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

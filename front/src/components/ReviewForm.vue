@@ -54,8 +54,17 @@
                 class="border rounded p-2 focus:outline-none focus:border-blue-500"
             />
         </div>
+        <div class="flex flex-col space-y-1">
+            <label for="description" class="text-lg font-semibold"> Description de l'avis : </label>
+            <input
+                v-model="description"
+                type="text"
+                id="description"
+                class="border rounded p-2 focus:outline-none focus:border-blue-500"
+            />
+        </div>
         <button
-            @click="addMarker"
+            @click="addReview"
             class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
             Ajouter le marqueur
@@ -75,29 +84,32 @@ export default {
             beerPrice: '',
             reviewer: '',
             barName: '',
+            description: '',
         };
     },
     methods: {
-        async addMarker() {
+        async addReview() {
             if (this.latitude && this.longitude && this.note && this.beerPrice) {
-                const markerData = {
+                const review = {
                     latitude: parseFloat(this.latitude),
                     longitude: parseFloat(this.longitude),
                     note: this.note,
                     beer_price: parseFloat(this.beerPrice),
                     reviewer: this.reviewer,
-                    barName: this.barName,
+                    bar_name: this.barName,
+                    description: this.description,
                 };
-                const response = await postReview(markerData);
+                const response = await postReview(review);
                 try {
                     if (response.ok) {
-                        this.$router.push('/');
+                        this.$router.push({ name: 'LeafletMap' });
                         this.latitude = '';
                         this.longitude = '';
                         this.note = '';
                         this.beerPrice = '';
                         this.reviewer = '';
                         this.barName = '';
+                        this.description = '';
                     } else {
                         alert("Erreur lors de l'ajout du marqueur.");
                     }

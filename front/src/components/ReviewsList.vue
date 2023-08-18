@@ -1,25 +1,30 @@
 <template>
     <div class="p-4">
-        <h2 class="text-xl font-semibold mb-4">Liste des Marqueurs</h2>
+        <h2 class="text-xl font-semibold mb-4">Liste des Notes</h2>
         <ul class="space-y-2">
-            <li v-for="mark in marks" :key="mark.id" class="border p-2">
-                <p>Nom du bar: {{ mark.barName }}</p>
-                <p>Latitude: {{ mark.latitude }}</p>
-                <p>Longitude: {{ mark.longitude }}</p>
-                <p>Note: {{ mark.note }}</p>
-                <p>Prix de la bière: {{ mark.beerPrice }}</p>
-                <p>Noteur: {{ mark.reviewer }}</p>
+            <li v-for="review in reviews" :key="review.id" class="border p-2">
+                <p>Nom du bar: {{ review.bar_name }}</p>
+                <p>Note: {{ review.note }}</p>
+                <p>Prix de la bière: {{ review.beer_price }}</p>
+                <p>Prénom: {{ review.reviewer }}</p>
+                <p>Description: {{ review.description }}</p>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
+import { getReviews } from '@/services/reviews.service.js';
+
 export default {
-    props: {
-        marks: Array, // Propriété pour passer la liste des marqueurs au composant
+    data() {
+        return {
+            reviews: [],
+        };
     },
-    created() {},
+    async created() {
+        this.reviews = await getReviews();
+    },
 };
 </script>
 
